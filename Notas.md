@@ -5,6 +5,8 @@
 En nodeJS se tienen diferentes variables globales, pero la principal de donde vienen las diferentes variables y funciones que usamos como *console*, *fetch*, etc es **globalThis**.
 **globalThis** es un objeto que está disponible tanto para nodeJS como en el navegador y tiene alias que lo referencia. En nodeJS es *global* y en el navegador es *window*.
 
+Otra variable global que podemos usar para temas de la ejecución de nuestro código es **process**. Con esta variable podemos no sólo tener información del proceso de ejecución, sino también de los parámetros de entrada, variables de entorno, etc.
+
 ## Exportar e importar módulos
 En nodeJS existen dos formas de exportar e importar tus módulos. La versión de CommonJS y la de EmacScript.
 ### CommonJS
@@ -71,3 +73,92 @@ const myM = require('myModule'); // <--- Aquí usar el punto y coma porque viene
     }
 )() // <-- se ejecuta la función encapsulada
 ```
+
+## NPM
+Es el administrador de paquetes de Node. Este nombre está asociado a dos conceptos:
+
+1. **Biblioteca de paquetes:** Sitio en la nube donde se almacenan todas las librerías que vas a utilizar en Node. Estas librerías están empaquetadas 📦.
+2. **Utilidad para descargar paquetes:** Por defecto tienes la utilidad del mismo nombre. La usas en la **línea de comandos** y te sirve para descargar e instalar librerías de NPM. Otras utilidades que tiene el mismo fin son **yarn** y **pnpm** y puedes seguir descargando tus librerías desde NPM.
+
+### Inicialización de un proyecto en Node.
+El primer paso para empezar un proyecto en Node con sus dependencias es ejecutar el siguiente comando:
+```sh
+$ npm init
+```
+Al ejecutar este comando nos pedirá información del proyecto que vamos a construir:
+- Nombre del proyecto.
+- Descripción breve del proyecto.
+- Versión del proyecto.
+- Nombre del desarrollador(es).
+- URL del repositorio en GIT.
+- Palabras claves.
+- Nombre del archivo de arranque del proyecto. Por ejemplo: *index.js*
+- Licensia de desarrollo con la que se rige el proyecto.
+
+Cuando completes esta información, nos creará un archivo llamado **package.json** con al información anterior entre otras cosas.
+
+### Instalar dependencias
+Para instalar dependencias se usa el comando:
+```sh
+$ npm install <nombre-dependencia>
+```
+Esto actualizará el archivo **package.json** donde agregará al listado de *dependencies*, el nombre del paquete que acabas de instalar.
+En la versión de la librería aparece antes del número el este símbolo ^, el cuál nos dice que este proyecto usará la versión actual y las versiones con actualizaciones menores. Es decir, si el paquete instalado tiene la versión 1.0.0, cuando vuelvas a instalar las dependencias de ese proyecto, se buscarán versiones posteriores dentro de la versión 1, como la 1.0.2, 1.1.0, 1.2.1, etc.
+
+Los paquetes o librerías instalados, se guardarán en la carpeta *node_modules*.
+
+**Sugerencia 👇:** Se recomienda quitar el símbolo para evitar problemas de compatibilidad con versiones futuras y hacer el proceso de actualización manual.
+
+### Tipos de dependencias
+En el mundo de las dependencias de NodeJS se tienen dos tipos de dependencias:
+- **Dependencias de producción:** Son aquellas librerías que necesita, sí o sí, nuestra aplicación para funcionar.
+Estas quedan registradas en el archivo *package.json* en la sección de **dependencies**:
+    ```json
+    // ...
+    "dependencies": {
+        "picocolors": "1.0.0",
+        // más dependencias...
+    }
+    ```
+- **Dependencias de desarrollo:** Son aquellas librerías que no necesita la aplicación pero complementan o ayudan en el proceso de desarrollo de la misma.
+Estas se instalan usando el comando
+    ```sh
+    $ npm install <nombre-librería> [-D] [--development]
+    ```
+    Estas librerías quedarían registradas en en archivo *package.json* en la sección **devDependencies**:
+    ```json
+    // ...
+    "devDependencies": {
+        "standard": "17.1.0",
+        // más dependencias de desarrollo...
+    }
+
+## Estilos de codificación
+Hay una estructura de o estilo de programación para JavaScript que es sin punto y coma, es denominado [Standard JS](https://standardjs.com/). Evalúa el código que codificas y te notifica de posibles errores. Se recomienda instalar como dependencia de desarrollo dentro del proyecto que estás trabajando.
+```sh
+$ npm install standard -D
+```
+Al tenerlo instalado, se debe configurar en el *package.json* la utilidad de *esLint*:
+```json
+"eslintConfig": {
+    "extends": "standard"
+}
+```
+
+### Configuración de VSCode para arreglar los problemas automáticamente:
+1. Tener instalado la extensión de *ESLint*.
+2. Habilitar el formateo cuando se guarda y la herramienta que ayuda al proceso de formatear. Ir al archivo **settings.json**
+    ```json
+    // ...
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true
+    },
+    // ...
+    ```
+3. En el mismo archivo, habilitar la opción de arreglar los problemas de eslint al guardar:
+    ```json
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+    ```
